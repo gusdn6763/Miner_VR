@@ -11,14 +11,15 @@ TagManager:
   - HitBox
   - Weapon
   - Ore
+  - Ground
   layers:
   - Default
   - TransparentFX
   - Ignore Raycast
-  - 
+  - OreEnable
   - Water
   - UI
-  - 
+  - Ground
   - 
   - 
   - 

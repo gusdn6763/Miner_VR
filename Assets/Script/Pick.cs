@@ -21,6 +21,45 @@ public class Pick : XRGrabInteractable
     public int damage = 0;
     public bool isInHolster;
 
+    void Start()
+    {
+        secondHandGrabPoints.selectEntered.AddListener(OnSecondHandGrab);
+        secondHandGrabPoints.selectExited.AddListener(OnSecondHandRelease);
+    }
+
+    public override void ProcessInteractable(XRInteractionUpdateOrder.UpdatePhase updatePhase)
+    {
+        if (secondInteractor && selectingInteractor && !isInHolster)
+        {
+            selectingInteractor.attachTransform.rotation = GetTwoHandRotation();
+        }
+        base.ProcessInteractable(updatePhase);
+    }
+
+    private Quaternion GetTwoHandRotation()
+    {
+        Quaternion targetRotation;
+        targetRotation = Quaternion.LookRotation(secondInteractor.attachTransform.position - selectingInteractor.attachTransform.position);
+        return targetRotation;
+    }
+
+    public void OnSecondHandGrab(SelectEnterEventArgs args)
+    {
+        if (args.interactor != null)
+        {
+            if (selectingInteractor)
+            {
+                initialRotationOffset = Quaternion.Inverse(GetTwoHandRotation()) * selectingInteractor.attachTransform.rotation;
+            }
+        }
+    }
+
+    public void OnSecondHandRelease(SelectExitEventArgs args)
+    {
+        Debug.Log("SECOND HAND RELEASE");
+        secondInteractor = null;
+    }
+
     protected override void OnSelectEntering(SelectEnterEventArgs args)
     {
         Debug.Log("First Grab Enter");
@@ -41,50 +80,8 @@ public class Pick : XRGrabInteractable
         {
             isInHolster = true;
         }
-        //attachInitialRotation = args.interactor.attachTransform.localRotation;
+        attachInitialRotation = args.interactor.attachTransform.localRotation;
         base.OnSelectEntering(args);
-    }
-
-    void Start()
-    {
-        secondHandGrabPoints.selectEntered.AddListener(OnSecondHandGrab);
-        secondHandGrabPoints.selectExited.AddListener(OnSecondHandRelease);
-    }
-
-    public override void ProcessInteractable(XRInteractionUpdateOrder.UpdatePhase updatePhase)
-    {
-        if (secondInteractor && selectingInteractor && !isInHolster)
-        {
-            selectingInteractor.attachTransform.rotation = GetTwoHandRotation();
-        }
-        base.ProcessInteractable(updatePhase);
-    }
-
-
-    private Quaternion GetTwoHandRotation()
-    {
-        Quaternion targetRotation;
-        targetRotation = Quaternion.LookRotation(secondInteractor.attachTransform.position - selectingInteractor.attachTransform.position);
-        return targetRotation;
-    }
-
-
-    public void OnSecondHandGrab(SelectEnterEventArgs args)
-    {
-        if (args.interactor != null)
-        {
-            secondInteractor = args.interactor;
-            if (selectingInteractor)
-            {
-                initialRotationOffset = Quaternion.Inverse(GetTwoHandRotation()) * selectingInteractor.attachTransform.rotation;
-            }
-        }
-    }
-
-    public void OnSecondHandRelease(SelectExitEventArgs args)
-    {
-        Debug.Log("SECOND HAND RELEASE");
-        secondInteractor = null;
     }
 
 

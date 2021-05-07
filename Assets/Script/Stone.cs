@@ -9,7 +9,6 @@ public class Stone : MonoBehaviour
 
     private void OnCollisionEnter(Collision collision)
     {
-        print(collision.gameObject);
         if (collision.gameObject.CompareTag(Constant.pick))
         {
             Vector3 pos = collision.contacts[0].point;

@@ -4,7 +4,10 @@
 EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
-  m_Scenes: []
+  m_Scenes:
+  - enabled: 1
+    path: Assets/Scenes/Demo Scene Low Poly Mining_Showcase.unity
+    guid: 317faeb300736fb4a83f813202461406
   m_configObjects:
     Unity.XR.Oculus.Settings: {fileID: 11400000, guid: 25a3cd9faeb42824a8a1bce394043a8d, type: 2}
     com.unity.xr.management.loader_settings: {fileID: 11400000, guid: c50ebd376d1f8654e9c24ecb7786af88, type: 2}
